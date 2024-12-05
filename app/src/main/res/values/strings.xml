@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">FragmentNotePad</string>
+    <string name="exit">Выход</string>
+    <string name="count">№</string>
+    <string name="text_note">Текст заметки</string>
+    <string name="data_add">Дата добавления</string>
+    <string name="add">Добавить</string>
+    <string name="count_note">Номер заметки</string>
+    <string name="date_create">Дата создания</string>
+</resources>
