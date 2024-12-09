@@ -1,5 +1,7 @@
 package com.example.fragmentnotepad
 
+import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.icu.text.Transliterator.Position
 import android.os.Bundle
