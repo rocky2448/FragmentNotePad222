@@ -10,7 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 class CustomAdapter(val notes: MutableList<Note>) :
     RecyclerView.Adapter<CustomAdapter.NoteViewHolder>() {
 
-        class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private var onNoteClickListener: OnNoteClickListener? = null
+
+    interface OnNoteClickListener {
+        fun OnNoteClick (note: Note, position: Int)
+    }
+
+    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val countTV: TextView = itemView.findViewById(R.id.countTV)
         val textNoteTV: TextView = itemView.findViewById(R.id.textNoteTV)
         var dateCreateTV: TextView = itemView.findViewById(R.id.dateCreateTV)
@@ -31,5 +37,9 @@ class CustomAdapter(val notes: MutableList<Note>) :
         holder.textNoteTV.text = note.textNote
         holder.dateCreateTV.text = note.dateCreate
         holder.checkBoxConditionCB.isChecked = note.checkBoxCondition
+    }
+
+    fun setOnNoteClickListener(onNoteClickListener: OnNoteClickListener) {
+        this.onNoteClickListener = onNoteClickListener
     }
 }

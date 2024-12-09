@@ -8,20 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.FragmentTransaction
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnFragmentDataListener {
 
     private lateinit var toolbarMain: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
         toolbarMain = findViewById(R.id.toolbarMain)
 
@@ -30,11 +25,26 @@ class MainActivity : AppCompatActivity() {
         toolbarMain.subtitle = "by Rocky"
         toolbarMain.setLogo(R.drawable.ic_note_pad)
 
+        val notePadFragment = NotePadFragment()
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, NotePadFragment())
+                .replace(R.id.containerID, notePadFragment)
                 .commit()
         }
+    }
+
+    override fun onData(data: String?) {
+        val bundle = Bundle()
+        bundle.putString("text", data)
+
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val editNoteFragment = EditNoteFragment()
+        editNoteFragment.arguments = bundle
+
+        transaction.replace(R.id.containerID, editNoteFragment)
+        transaction.addToBackStack(null)
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        transaction.commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

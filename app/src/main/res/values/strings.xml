@@ -9,4 +9,6 @@
     <string name="date_create">Дата создания</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit">Редактировать</string>
+    <string name="edit_note">Редактирование заметки</string>
 </resources>
