@@ -10,6 +10,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentTransaction
 
+val notes: MutableList<Note> = mutableListOf()
+var count: Int = 1
+
 class MainActivity : AppCompatActivity(), OnFragmentDataListener {
 
     private lateinit var toolbarMain: Toolbar
@@ -33,10 +36,10 @@ class MainActivity : AppCompatActivity(), OnFragmentDataListener {
         }
     }
 
-    override fun onData(data: String?) {
+    override fun onData(data: String?, position: Int) {
         val bundle = Bundle()
         bundle.putString("text", data)
-
+        bundle.putInt("position", position)
         val transaction = this.supportFragmentManager.beginTransaction()
         val editNoteFragment = EditNoteFragment()
         editNoteFragment.arguments = bundle

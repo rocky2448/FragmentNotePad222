@@ -37,7 +37,14 @@ class CustomAdapter(val notes: MutableList<Note>) :
         holder.textNoteTV.text = note.textNote
         holder.dateCreateTV.text = note.dateCreate
         holder.checkBoxConditionCB.isChecked = note.checkBoxCondition
+
+        // Устанавливаем клик-листенер для всего элемента ViewHolder
+        holder.itemView.setOnClickListener {
+            onNoteClickListener?.OnNoteClick(note, position)
+        }
     }
+
+
 
     fun setOnNoteClickListener(onNoteClickListener: OnNoteClickListener) {
         this.onNoteClickListener = onNoteClickListener

@@ -1,9 +1,5 @@
 package com.example.fragmentnotepad
 
-import android.app.Application
-import android.content.Context
-import android.content.Intent
-import android.icu.text.Transliterator.Position
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,18 +9,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.withContext
 import java.util.Date
-
 
 class NotePadFragment : Fragment() {
 
+    private lateinit var adapter: CustomAdapter
     private lateinit var onFragmentDataListener: OnFragmentDataListener
-    private val notes: MutableList<Note> = mutableListOf()
-    private var count: Int = 1
     private lateinit var generateCountTV: TextView
     private lateinit var textNoteET: EditText
     private lateinit var addBTN: Button
@@ -38,6 +31,7 @@ class NotePadFragment : Fragment() {
         Log.d("FragmentNotePad", "OnCreateView")
         onFragmentDataListener = requireActivity() as OnFragmentDataListener
         val view = inflater.inflate(R.layout.fragment_note_pad, container, false)
+
         generateCountTV = view.findViewById(R.id.generateCountTV)
         textNoteET = view.findViewById(R.id.textNoteET)
         addBTN = view.findViewById(R.id.addBTN)
@@ -45,14 +39,16 @@ class NotePadFragment : Fragment() {
 
         generateCountTV.text = "№ $count"
 
-        val adapter = CustomAdapter(notes)
+        adapter = CustomAdapter(notes)
         recyclerViewRV.adapter = adapter
+
         recyclerViewRV.setHasFixedSize(true)
         recyclerViewRV.layoutManager = LinearLayoutManager(context)
         adapter.setOnNoteClickListener(object :
             CustomAdapter.OnNoteClickListener {
                 override fun OnNoteClick(note: Note, position: Int) {
-                    onFragmentDataListener.onData(notes[position].textNote)
+                    Toast.makeText(context, "Позиция элемента $position", Toast.LENGTH_SHORT).show()
+                    onFragmentDataListener.onData(notes[position].textNote, position)
                 }
             }
         )
@@ -69,21 +65,13 @@ class NotePadFragment : Fragment() {
             val note = Note(count, textNote, dateCreate, checkBoxCondition)
             notes.add(note)
             adapter.notifyDataSetChanged()
+            Toast.makeText(context, "Заметка добавлена", Toast.LENGTH_SHORT).show()
             count = ((notes[notes.size - 1].count) + 1)
             generateCountTV.text = "№ $count"
             textNoteET.text.clear()
         }
-
         return view
     }
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//        val generateCountTV: TextView = view.findViewById(R.id.generateCountTV)
-//        val textNoteET: EditText = view.findViewById(R.id.textNoteET)
-//        val addBTN: Button = view.findViewById(R.id.addBTN)
-//        val recyclerViewRV: RecyclerView = view.findViewById(R.id.recyclerViewRV)
-//    }
 
     override fun onResume() {
         Log.d("OnResume", "Activate")
@@ -92,10 +80,18 @@ class NotePadFragment : Fragment() {
         if (text != null) {
             val position = arguments?.getInt("position")
             swap(notes, position!!, text)
+            adapter.notifyDataSetChanged()
         }
     }
 
-    fun swap(notes: MutableList<Note>, position: Int, textNote: String) {
-        notes[position].textNote = textNote
+    private fun swap(notes: MutableList<Note>, position: Int, textNote: String) {
+        Toast.makeText(context, "Позиция элемента равна $position", Toast.LENGTH_SHORT).show()
+        if (position in notes.indices) {
+            notes[position].textNote = textNote
+        }
     }
+
+//    fun swap(notes: MutableList<Note>, position: Int, textNote: String) {
+//        notes[position].textNote = textNote
+//    }
 }

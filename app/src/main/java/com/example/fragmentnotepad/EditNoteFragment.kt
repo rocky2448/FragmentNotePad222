@@ -36,14 +36,16 @@ class EditNoteFragment : Fragment(), OnFragmentDataListener {
                 return@setOnClickListener
             }
             val value = editNoteET.text
-            onData(value.toString())
+            onData(value.toString(), position!!)
+
         }
         return view
     }
 
-    override fun onData(data: String?) {
+    override fun onData(data: String?, position: Int) {
         val bundle = Bundle()
         bundle.putString("newText", data)
+        bundle.putInt("position", position)
 
         val transaction = this.fragmentManager?.beginTransaction()
         val notePadFragment = NotePadFragment()
